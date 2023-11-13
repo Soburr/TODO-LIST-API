@@ -15,49 +15,47 @@ class UserController extends Controller
 {
    public function register(Request $request) {
        $request->validate([
-          'name' => ['required', 'string'],
-          'email' => ['required', 'email', 'string', 'unique:users,email'],
-          'password' => ['required', Rules\Password::min('8')]
+         'name' => ['required'],
+         'email' => ['required', 'email', 'unique:users'],
+         'password' => ['required']
        ]);
 
        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password)
+          'name' => $request->name,
+          'email' => $request->email,
+          'password' => Hash::make($request->password)
        ]);
 
-       $user->save();
-       return response()->json(['message' => 'User Has Been Registered Successfully'], 200);
+       $token = $user->createToken('authToken')->plainTextToken;
+
+       return response()->json([
+          'message' => 'Registration Successful',
+          'token' => $token,
+       ], 200);
    }
 
    public function login(Request $request) {
-    $request->validate([
-        'email' => ['required', 'email'],
-        'password' => ['required']
-    ]);
+        $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required']
+        ]);
 
-    $credentials = request(['email', 'password']);
+        $user = User::where('email', $request->email)->firstOrFail();
 
-    if (!Auth::check($credentials)) {
-        return response()->json(['message' => 'Unauthorized'], 401);
-    }
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return response()->json([
+                'message' => 'Invalid Credentials',
 
-    $user = Auth::user();
-    $tokenResult = $user->createToken('Personal Access Token');
-    $token = $tokenResult->token;
-    $token->expires_at = Carbon::now()->addWeeks(1);
-    $token->save();
+            ], 401);
+        }
 
-    return response()->json([
-        'data' => [
-            'user' => $user,
-            'access_token' => $tokenResult->accessToken,
-            'token_type' => 'Bearer',
-            'expires_at' => Carbon::parse($token->expires_at)->toDateTimeString()
-        ]
-    ]);
-}
+        $token = $user->createToken('authToken')->plainTextToken;
 
+        return response()->json([
+           'message' => 'Login Successful',
+           'token' => $token,
+        ], 200);
+   }
 
 }
 

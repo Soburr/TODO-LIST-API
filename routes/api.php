@@ -15,24 +15,16 @@ use App\Http\Controllers\API\UserController;
 |
 */
 
-// Route::group(['prefix' => 'auth'], function () {
-//     Route::post('register', 'AuthController@register');
-//     Route::post('login', 'AuthController@login');
-// });
-
-
-// Route::middleware('auth:api')->prefix('auth')->group(function() {
-//      Route::post('/register', 'API\UserController@register');
-//      Route::post('/login', '\API\UserController@login');
+// Route::group(['prefix' => 'auth', 'namespace' => 'App\Http\Controllers\API', 'middleware' => 'auth:sanctum'], function() {
+//     Route::post('/register', ['uses' => 'UserController@register']);
+//     Route::post('/login', ['uses' => 'UserController@login']);
 
 // });
 
-Route::group(['prefix' => 'auth', 'namespace' => 'App\Http\Controllers\API', 'middleware' => 'auth:api'], function() {
-    Route::post('/register', ['uses' => 'UserController@register']);
-    Route::post('/login', ['uses' => 'UserController@login']);
-
-});
-
-Route::middleware('auth:api')->get('/user', function (Request $request) {
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::post('register', 'App\Http\Controllers\API\UserController@register');
+Route::post('login', 'App\Http\Controllers\API\UserController@login');
+
