@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 
 
-class UserController extends Controller
+class AuthController extends Controller
 {
    public function register(Request $request) {
        $request->validate([
@@ -31,6 +31,7 @@ class UserController extends Controller
        return response()->json([
           'message' => 'Registration Successful',
           'token' => $token,
+          'user' => $user,
        ], 200);
    }
 
@@ -54,9 +55,8 @@ class UserController extends Controller
         return response()->json([
            'message' => 'Login Successful',
            'token' => $token,
+           'user' => $user,
         ], 200);
    }
 
 }
-
-// L10tpubiDzM8edSxFY2VvgicZyKPTAKUYdD8CeIu

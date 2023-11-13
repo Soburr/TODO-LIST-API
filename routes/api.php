@@ -2,7 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\TodoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,16 +16,16 @@ use App\Http\Controllers\API\UserController;
 |
 */
 
-// Route::group(['prefix' => 'auth', 'namespace' => 'App\Http\Controllers\API', 'middleware' => 'auth:sanctum'], function() {
-//     Route::post('/register', ['uses' => 'UserController@register']);
-//     Route::post('/login', ['uses' => 'UserController@login']);
+Route::group(['prefix' => 'auth', 'namespace' => 'App\Http\Controllers\API', 'middleware' => 'auth:sanctum'], function() {
+    Route::apiResource('/todo', TodoController::class);
+    // Route::post('/login', ['uses' => 'UserController@login']);
 
-// });
+});
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('register', 'App\Http\Controllers\API\UserController@register');
-Route::post('login', 'App\Http\Controllers\API\UserController@login');
+Route::post('register', 'App\Http\Controllers\API\AuthController@register');
+Route::post('login', 'App\Http\Controllers\API\AuthController@login');
 
