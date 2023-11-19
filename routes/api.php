@@ -16,7 +16,7 @@ use App\Http\Controllers\TodoController;
 |
 */
 
-Route::group(['prefix' => 'auth', 'namespace' => 'App\Http\Controllers\API', 'middleware' => 'auth:sanctum'], function() {
+Route::group(['prefix' => 'auth', 'namespace' => 'App\Http\Controllers', 'middleware' => 'auth:sanctum'], function() {
     Route::apiResource('/todo', TodoController::class);
     // Route::post('/login', ['uses' => 'UserController@login']);
 
@@ -26,6 +26,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('register', 'App\Http\Controllers\API\AuthController@register');
-Route::post('login', 'App\Http\Controllers\API\AuthController@login');
+Route::post('register', 'App\Http\Controllers\AuthController@register');
+Route::post('login', 'App\Http\Controllers\AuthController@login');
 
+Route::get('todo', 'App\Http\Controllers\TodoController@index');
+Route::post('todo', 'App\Http\Controllers\TodoController@store');

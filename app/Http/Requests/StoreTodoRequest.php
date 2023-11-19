@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreTodoRequest extends FormRequest
 {
@@ -11,18 +12,17 @@ class StoreTodoRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
         return [
-            //
+            'name' => ['required', 'string'],
+            'title' => ['required', 'string'],
+            'status' => ['required', Rule::in(['C', 'P', 'c', 'p'])],
+            'completed_date' =>  ['nullable', 'date', 'date_format:Y-m-d'],
+            'initiated_date' =>  ['required', 'date', 'date_format:Y-m-d'],
         ];
     }
 }
