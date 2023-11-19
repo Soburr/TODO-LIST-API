@@ -18,12 +18,26 @@ class UpdateTodoRequest extends FormRequest
 
     public function rules(): array
     {
-        return [
-            'name' => ['required', 'string'],
-            'title' => ['required', 'string'],
-            'status' => ['required', Rule::in(['C', 'P', 'c', 'p'])],
-            'completed_date' => ['required', 'date'],
-            'initiated_date' => ['required', 'date'],
-        ];
+
+        $method = $this->method();
+
+        if ($method === 'PUT') {
+            return [
+                'name' => ['required', 'string'],
+                'title' => ['required', 'string'],
+                'status' => ['required', Rule::in(['C', 'P', 'c', 'p'])],
+                'completed_date' =>  ['nullable', 'date', 'date_format:Y-m-d'],
+                'initiated_date' =>  ['required', 'date', 'date_format:Y-m-d'],
+            ];
+        } else {
+            return [
+                'name' => ['sometimes', 'required', 'string'],
+                'title' => ['sometimes', 'required', 'string'],
+                'status' => ['sometimes', 'required', Rule::in(['C', 'P', 'c', 'p'])],
+                'completed_date' =>  ['sometimes', 'nullable', 'date', 'date_format:Y-m-d'],
+                'initiated_date' =>  ['sometimes', 'required', 'date', 'date_format:Y-m-d'],
+            ];
+        }
+        
     }
 }
