@@ -33,4 +33,4 @@ Route::get('todo', 'App\Http\Controllers\TodoController@index');
 Route::post('todo', 'App\Http\Controllers\TodoController@store');
 Route::get('todo/{todo}', 'App\Http\Controllers\TodoController@show');
 Route::patch('todo/{todo}', 'App\Http\Controllers\TodoController@update');
-Route::delete('todo/{todo}', 'App\Http\Controllers\TodoController@delete');
+Route::delete('todo/{todo}', 'App\Http\Controllers\TodoController@destroy');
